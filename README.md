@@ -1,4 +1,4 @@
 die_moerse
 ==========
 
-A study project: A marketplace for literally invaluable goods
+A marketplace for literally invaluable goods, with user & product accounts, bargain mechanism etc. (A study project)
