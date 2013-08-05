@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Die moerse</title>
+		<%= stylesheet_link_tag "application" %>
+	</head>
+	<body>
+		<div id="overall">
+			<div id="header">
+				<%= link_to image_tag("/images/layout/000_header.png"), home_path %>
+				<%= image_tag "/images/layout/010_arrow-left.png" %>
+				<%= link_to image_tag("/images/layout/011_all-users.png"), :action => :index, :controller => :users %>
+				<%= link_to image_tag("/images/layout/012_all-products.png"), :action => :index, :controller => :products %>
+				<%= link_to image_tag("/images/layout/013_all-bargains.png"), :action => :index, :controller => :bargains %>
+				
+				<% if session[:user].present? %>
+					<%= image_tag "/images/layout/014_welcome-back.png", :style => "margin-left: 3px" %>					
+				<% else %>
+					<%= image_tag "/images/layout/014_login.png", :style => "margin-left: 3px" %>
+				<% end %>				
+			</div>
+			
+		<div id="user-reg">
+				<% if session[:user].present? %>
+					<div style="font-size: 23px">
+						<%= session[:user].name %>
+					</div>
+					
+					<div style="float: left; padding-left: 0px">
+						<% if session[:user].photo.present? %>
+							<%= image_tag session[:user].photo.url(:thumb) %>
+						<% else %>
+							<%= image_tag "/images/dummy_user.jpg", {:height => 100} %>
+						<% end %>
+					</div>
+					
+					<% 	
+						@bargainsPendingCount = Bargain.find(:all, :conditions => {:userId1 => session[:user].id, :status => "0"})
+						@bargainsPendingCount += Bargain.find(:all, :conditions => {:userId2 => session[:user].id, :status => "0"})
+					%>
+					
+					<div>
+						Sie haben <%= @bargainsPendingCount.count > 0 ? (link_to @bargainsPendingCount.count, dashboard_path + "#pending") : @bargainsPendingCount.count %> ausstehende Tausche!<br /><br />
+						<%= link_to "Dashboard", dashboard_path %><br/>
+						<%= link_to "Logout", logout_path %>
+					</div>
+				<% else %>
+					<div>
+						<%= form_tag sessions_path do %>
+							<%= text_field_tag :email %><br/>
+							<%= password_field_tag :password %><br/>
+							<%= submit_tag "Login" %>
+						<% end %>
+						<br />
+						<a href="<%= url_for :action => :new, :controller => :users %>">Registrieren</a><br />
+						<%= link_to "Passwort vergessen?", resetPassword_path %></a>
+					</div>
+				<% end %>
+			</div>
+				
+			<div id="content">
+				<% if flash[:notice].present? %><p id="notice"><%= flash[:notice] %></p><% end %>
+				<%= yield %>
+			</div>
+			<div style="clear: both; width: 100%; text-align: center; padding-top: 30px; padding-bottom: 20px">
+				<a href="<%= url_for :action => :index, :controller => :imprint %>">Impressum</a> | <a href="<%= url_for :action => :index, :controller => :agb %>">AGB</a>
+			</div>
+		</div>
+	</body>
+</html>

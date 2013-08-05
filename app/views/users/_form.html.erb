@@ -1,0 +1,47 @@
+﻿<%= form_for @user, :html => { :multipart => true } do |f| %>
+	<% if @user.errors.any? %>
+		<div id="error_explanation">
+			<h2><%= @user.errors.count %> Fehler haben das Speichern dieses Kontos verhindert:</h2>
+
+			<ul>
+				<% @user.errors.full_messages.each do |msg| %>
+					<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
+
+	<p>
+		<%= f.label :name %><br />
+		<%= f.text_field :name %>
+	</p>
+
+	<p>
+		<%= f.label :password, "Passwort" %><br />
+		<%= f.password_field :password %>
+	</p>
+
+	<p>
+		<%= f.label :password_confirmation, "Passwort wiederholen" %><br />
+		<%= f.password_field :password_confirmation %>
+	</p>
+
+	<p>
+		<%= f.label :email %><br />
+		<%= f.text_field :email %>
+	</p>
+	
+	<p>
+		<%= f.label :photo, "Foto" %><br />
+		<%= f.file_field :photo %>
+	</p>
+	
+	<p>
+		<%= f.check_box :gotSample %>
+		Ich habe eine Gratisprobe erhalten.
+	</p>
+	
+	<p>
+	<%= submit_tag "abschicken" %>
+	</p>
+<% end %>

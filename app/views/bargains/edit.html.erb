@@ -1,0 +1,14 @@
+﻿<h1>Tausch bearbeiten!</h1>
+  
+<% if @bargain.status < 1 %>
+	<%= render 'form_deal' %>
+<% else %>
+	<%= render 'form_finished' %>
+<% end %>
+
+<p><%= link_to 'Tausch zeigen', @bargain %></p>
+
+<br/><br/>
+<% if session[:user].id == 1 %>
+	<p><a href="<%= url_for bargain_destroy_path(:id => @bargain.id) %>">ALS ADMINISTRATOR LÖSCHEN</a></p>
+<% end %>

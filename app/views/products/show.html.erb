@@ -1,0 +1,87 @@
+﻿<h1><%= @product.name %>!</h1>
+<%= image_tag "/images/bottles/" + (1..14).to_a.sample.to_s + ".jpg", {:height => 400} %>
+<div style="font-size: 1; color: #666666; margin-top: -5px">© Stefan Kaz</div>
+
+<p>
+  <span class="list-head">Beschreibung</span><br />
+  <%= @product.description %>
+</p>
+
+<% if (@product.photo1.present?) %>
+	<p><%= image_tag(@product.photo1.url(:thumb)) %></p>
+<% end %>
+
+<% if (@product.photo2.present?) %>
+	<p><%= image_tag(@product.photo2.url(:thumb)) %></p>
+<% end %>
+
+<% if (@product.photo3.present?) %>
+	<p><%= image_tag(@product.photo3.url(:thumb)) %></p>
+<% end %>
+
+<% if (@product.photo4.present?) %>
+	<p><%= image_tag(@product.photo4.url(:thumb)) %></p>
+<% end %>
+
+<p>
+  <span class="list-head">Marke</span><br />
+  <%= @product.brand %>
+</p>
+<p>
+  <span class="list-head">Produktklasse</span><br />
+  <%= @product.productClass %>
+</p>
+<p>
+  <span class="list-head">Kommentar</span><br />
+  <%= @product.comment %>
+</p>
+<p>
+  <span class="list-head">Gewicht</span><br />
+  <%= @product.weight %>
+</p>
+
+<p>
+	<span class="list-head">Benutzer</span><br />
+		<% if @owningUser.present? %>
+			<a href="<%= url_for :action => :show, :controller => :users, :id => @owningUser.id %>"><%= @owningUser.name %></a>
+		<% else %>
+			Kein Benutzer oder Benutzer gelöscht.
+	<% end %>
+</p>
+
+<h2>Beteiligte Tausche</h2>
+	<% @relatedBargainsProposed.each do |bargain| %>
+		<div class="link-list">
+			gegen
+			<span class="list-text"><%= bargain.product2quantity %>x </span>
+			<span class="list-head"><a href="<%= url_for :action => :show, :controller => :bargains, :id => bargain.id %>"><%= bargain.product2.name %></a></span>
+			<span class="list-text">von </span> <span class="list-head"><%= link_to bargain.owningUser2.name, bargain.owningUser2 %></span>
+		</div>
+	<% end %>
+	<% @relatedBargainsAccepted.each do |bargain| %>
+		<div class="link-list">
+			gegen
+			<span class="list-text"><%= bargain.product1quantity %>x </span>
+			<span class="list-head"><a href="<%= url_for :action => :show, :controller => :bargains, :id => bargain.id %>"><%= bargain.product1.name %></a></span>
+			<span class="list-text">von </span> <span class="list-head"><%= link_to bargain.owningUser1.name, bargain.owningUser1 %></span>
+		</div>
+	<% end %>
+	<% if @relatedBargainsProposed.count + @relatedBargainsAccepted.count == 0 %>
+		<div class="link-list">Mit diesem Produkt wurde bisher nicht erfolgreich gehandelt.</div>
+	<% end %>
+<br />
+<p><%= link_to "Mit diesem Produkt handeln", new_bargain_path %></p>
+<p>Diess Produkt wurde bisher <%= @product.views %>x aufgerufen.</p>
+
+<% if session[:user] && (@product.userId == session[:user].id) %>
+	<%= link_to "Eigenes Produkt bearbeiten", edit_product_path(@product) %>
+	<% if @relatedBargainsProposed.count + @relatedBargainsAccepted.count == 0 %>
+		| <a href="<%= url_for product_destroy_path(:id => @product.id) %>" data-confirm="Sind Sie sich sicher?">Produkt löschen</a>
+	<% end %>
+<% end %>
+
+<% if session[:user] && session[:user].id == 1 %>
+	<% if @relatedBargainsProposed.count + @relatedBargainsAccepted.count == 0 %>
+		<a href="<%= url_for product_destroy_real_path(:id => @product.id) %>" data-confirm="Sind Sie sich sicher?">ALS ADMINISTRATOR LÖSCHEN (vorsicht!)</a>
+	<% end %>
+<% end %>

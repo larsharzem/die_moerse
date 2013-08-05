@@ -1,0 +1,64 @@
+﻿<% if session[:first_time] && session[:first_time] == true %>
+<div style="color: #DD0000">
+	<p>Wir freuen uns, Sie in der moerse begrüßen zu dürfen. Ab sofort können Sie mit dem Tauschen loslegen. So einfach geht es:</p>
+	<ol>
+		<li>Klicken Sie auf <b>Alle Produkte</b> und klicken Sie auf <b>Produkt erstellen</b>.<br/>
+			Hier können Sie Ihr Tauschprodukt eintragen, was Sie gern anbieten möchten.</li>
+		<li>Nun können Sie unter <b>Alle Tausche</b> Ihre ganz persönlichen Tauschoptionen gegen Ihr erstelltes Produkt nach Belieben vorschlagen!</li>
+	</ol>
+</div>
+<% end %>
+
+<h1>Eigene Produkte!</h1>
+<% @products.each do |product| %>  
+	<div class="link-list">
+		<a href="<%= url_for :action => :show, :controller => :products, :id => product.id %>">
+			<span class="list-head"><%= product.name %></span><br />
+			<span class="list-text"><%= product.description[0..100].strip + (product.description.length > 100 ? "... [mehr]" : "") %></span>
+		</a>
+	</div>
+<% end %>
+<% if @products.count == 0 %>
+	<div class="link-list">Sie haben noch keine Produkte eingestellt.</div>
+	<%= link_to 'Produkt erstellen', new_product_path %>
+<% end %>
+<a name="pending" /></a>
+<h1>Ausstehende Tausche!</h1>
+<% @bargainsPending.each do |bargain| %>
+	<div class="link-list">
+		<a href="<%= url_for :action => :edit, :controller => :bargains, :id => bargain.id %>">
+			<span class="list-head"><%= bargain.product1.name %></span>
+			<span class="list-text"><%= bargain.product1quantity %>x</span><span class="list-text">gegen</span><span class="list-text"><%= bargain.product2quantity %>x</span>
+			<span class="list-head"><%= bargain.product2.name %></span>
+		</a>
+	</div>
+<% end %>
+<% if @bargainsPending.count == 0 %>
+	<div class="link-list">Sie haben keine ausstehenden Tausche.</div>
+	<%= link_to 'Tausch vorschlagen', new_bargain_path %>
+<% end %>
+
+<h1>Abgeschlossene Tausche!</h1>
+<% @bargainsProposed.each do |bargain| %>
+	<div class="link-list">
+		<a href="<%= url_for :action => :edit, :controller => :bargains, :id => bargain.id %>">
+			<span class="list-head"><%= bargain.product1.name %></span>
+			<span class="list-text"><%= bargain.product1quantity %>x</span><span class="list-text">gegen</span><span class="list-text"><%= bargain.product2quantity %>x</span>
+			<span class="list-head"><%= bargain.product2.name %></span>
+		</a>
+	</div>
+<% end %>
+<% @bargainsAccepted.each do |bargain| %>
+	<div class="link-list">
+		<a href="<%= url_for :action => :edit, :controller => :bargains, :id => bargain.id %>">
+			<span class="list-head"><%= bargain.product1.name %></span>
+			<span class="list-text"><%= bargain.product1quantity %>x</span><span class="list-text">gegen</span><span class="list-text"><%= bargain.product2quantity %>x</span>
+			<span class="list-head"><%= bargain.product2.name %></span>
+		</a>
+	</div>
+<% end %>
+<% if @bargainsProposed.count + @bargainsAccepted.count == 0 %>
+	<div class="link-list">Sie haben noch keinen Tausch durchgef&uuml;hrt.</div>
+<% end %>
+
+<%= link_to "Eigenes Profil bearbeiten", edit_user_path(@user) %>

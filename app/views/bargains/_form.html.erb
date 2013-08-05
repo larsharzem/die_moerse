@@ -1,0 +1,39 @@
+<%= form_for(@bargain) do |f| %>
+  <% if @bargain.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@bargain.errors.count, "error") %> prohibited this bargain from being saved:</h2>
+
+      <ul>
+      <% @bargain.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div>
+	<select name="bargain[product1id]" size="8">
+		<% if @myProducts.count == 0 %>
+			<option value="0" disabled="disabled">Sie haben keine Produkte...</option>
+		<%
+			else
+			myProductsArray = @myProducts.map { |product| [product.name, product.id] }
+		%>
+			<%= options_for_select(myProductsArray, :selected => myProductsArray[0]) %>
+		<% end %>
+	</select>
+    <%= f.number_field :product1quantity, :size => 3, :maxlength => 3 %>&nbsp;gegen&nbsp;
+    <%= f.number_field :product2quantity, :size => 3, :maxlength => 3 %>
+	<select name="bargain[product2id]" size="8">	
+		<% otherProductsArray = @otherProducts.map { |product| [product.name, product.id] } unless @otherProducts.nil? %>
+		<%= options_for_select(otherProductsArray, :selected => otherProductsArray[0]) unless @otherProducts.nil? %>
+	</select>
+  </div>
+  <p>
+	<% if @myProducts.count == 0 %>
+		<%= submit_tag "Tausch erstellen", :disabled => true %>
+	<% else %>
+		<%= submit_tag "Tausch erstellen" %>
+	<% end %>
+  </p>
+<% end %>

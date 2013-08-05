@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  description: MyString
+  product1: 1
+  product1quantity: 1
+  product2: 1
+  product2quantity: 1
+  dateCreated: 1
+  dateAccepted: 1
+  status: 1
+
+two:
+  name: MyString
+  description: MyString
+  product1: 1
+  product1quantity: 1
+  product2: 1
+  product2quantity: 1
+  dateCreated: 1
+  dateAccepted: 1
+  status: 1

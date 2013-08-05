@@ -1,0 +1,23 @@
+﻿<h1>Alle Produkte!</h1>
+<% if session[:user] && session[:user].inactive != "true" %>
+	<p><%= link_to 'Produkt erstellen', new_product_path %></p>
+<% end %>
+<% @products.each do |product| %>
+	<div class="link-list">
+		<a href="<%= url_for :action => :show, :id => product.id %>">
+			<span class="list-head"><%= product.name %></span><br />
+			<span class="list-text"><%= product.description[0..100].strip + (product.description.length > 100 ? "... [mehr]" : "") %></span>
+		</a>
+	</div>
+<% end %>
+<br />
+
+<% if session[:user] %>
+	<% if session[:user].inactive == "true" %>
+		<p>Ihr Profil ist inaktiv! Bitte aktivieren Sie es, um wieder Produkte erstellen zu können.</p>
+	<% else %>
+		<p><%= link_to 'Produkt erstellen', new_product_path %></p>
+	<% end %>
+<% else %>
+	<p>Bitte loggen Sie sich ein um Produkte erstellen zu können!</p>
+<% end %>

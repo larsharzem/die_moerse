@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+	<style type="text/css">
+	body {
+		color: #333;
+		font-family: monospace;
+		font-weight: bold;
+		font-size: 13px;
+		color: #333333;
+		line-height: 18px;
+	}
+
+	a {
+	  color: #000;
+	  &:visited {
+		color: #666; }
+	  &:hover {
+		color: #333333; } }
+	</style>
+  </head>
+  <body>
+    <h2>Sie haben ein Übereinkommen mit <%= @sendingUser.name %>!</h2>
+	<p>Hallo <%= @receivingUser.name %>!</p>
+	<p><a href="http://emw.fh-potsdam.de/moerse/users/<%= @sendingUser.id %>"><%= @sendingUser.name %></a> hat folgenden Tausch akzeptiert:</p>
+	<p>
+		Sein Produkt "<%= @sendingUserProduct.name %>"
+	</p>
+	<p>gegen</p>
+	<p>
+		Ihr Produkt "<%= @receivingUserProduct.name %>"
+	</p>
+	<p><i>Setzen sich Sie mit Ihrem Tauschpartner über seine E-Mail-Adresse <a href="mailto:<%= @sendingUser.email %>"><%= @sendingUser.email %></a> in Verbindung, um den Tasuch durchzuführen</i></p>
+	<p>Unter <a href="http://www.moerse.tk">moerse.tk</a> können Sie sich Ihre Tausche anschauen.</p>
+	<p>Herzlichst<br/>
+	Ihre moerse</p>
+  </body>
+</html>

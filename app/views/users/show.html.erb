@@ -1,0 +1,53 @@
+﻿<div style="float: right; margin-right: 45px;">
+	<% if @user.photo.present? %>
+		<%= link_to image_tag(@user.photo.url(:thumb)), @user.photo.url(:original) %>
+	<% else %>
+		<%= image_tag "/images/dummy_user.jpg", {:height => 130} %>
+	<% end %>
+</div>
+<h1><%= @user.name %>!</h1>
+
+<h2>Produkte</h2>
+<% @products.each do |product| %>  
+	<div class="link-list">
+		<a href="<%= url_for :action => :show, :controller => :products, :id => product.id %>">
+			<span class="list-head"><%= product.name %></span><br />
+			<span class="list-text"><%= product.description %></span>
+		</a>
+	</div>
+<% end %>
+<% if @products.count == 0 %>
+	<div class="link-list">Dieser User hat noch keine Produkte eingstellt.</div>
+<% end %>
+
+<h2>Tausche</h2>
+<% @bargainsProposed.each do |bargain| %>
+	<div class="link-list">
+		<a href="<%= url_for :action => :show, :controller => :bargains, :id => bargain.id %>">
+			<span class="list-head"><%= bargain.product1.name %></span>
+			<span class="list-text"><%= bargain.product1quantity %>x</span><span class="list-text">gegen</span><span class="list-text"><%= bargain.product2quantity %>x</span>
+			<span class="list-head"><%= bargain.product2.name %></span>
+		</a>
+	</div>
+<% end %>
+<% @bargainsAccepted.each do |bargain| %>
+	<div class="link-list">
+		<a href="<%= url_for :action => :show, :controller => :bargains, :id => bargain.id %>">
+			<span class="list-head"><%= bargain.product1.name %></span>
+			<span class="list-text"><%= bargain.product1quantity %>x</span><span class="list-text">gegen</span><span class="list-text"><%= bargain.product2quantity %>x</span>
+			<span class="list-head"><%= bargain.product2.name %></span>
+		</a>
+	</div>
+<% end %>
+<% if @bargainsProposed.count + @bargainsAccepted.count == 0 %>
+	<div class="link-list">Dieser User hat noch keinen Tausch durchgef&uuml;hrt.</div>
+<% end %>
+
+<% if session[:user] && session[:user].id == @user.id %>
+	<%= link_to "Eigenes Profil bearbeiten", edit_user_path(@user) %>
+<% end %>
+<% if session[:user] && session[:user].id == 1 %>
+	<a href="<%= url_for user_destroy_real_path(:id => @user.id) %>">ALS ADMINISTRATOR LÖSCHEN (vorsicht!)</a><br />
+	Mail: <%= @user.email %><br />
+	Gratisprobe: <%= @user.gotSample ? "ja" : "nein" %>
+<% end %>

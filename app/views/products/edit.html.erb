@@ -1,0 +1,12 @@
+﻿<h1>Eigenes Produkt bearbeiten!</h1>
+
+<%= render 'form' %>
+<p>
+	<% if @relatedBargainsProposed.count + @relatedBargainsAccepted.count == 0 %>
+		<p><a href="<%= url_for product_destroy_path(:id => @product.id) %>" data-confirm="Sind Sie sich sicher?">Produkt löschen</a> |
+	<% else %>
+		Dieses Produkt wurde schon getauscht. Sie können es nicht mehr löschen.
+	<% end %>
+</p>
+
+<%= link_to 'Produkt zeigen', @product %>

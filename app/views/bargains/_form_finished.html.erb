@@ -1,0 +1,72 @@
+﻿<%= form_for(@bargain) do |f| %>
+	<% if @bargain.errors.any? %>
+		<div id="error_explanation">
+		  <h2><%= pluralize(@bargain.errors.count, "error") %> prohibited this bargain from being saved:</h2>
+
+		  <ul>
+		  <% @bargain.errors.full_messages.each do |msg| %>
+			<li><%= msg %></li>
+		  <% end %>
+		  </ul>
+		</div>
+	<% end %>
+	<input id="bargain[proposingUser]" name="bargain[proposingUser]" type="hidden" value="<%= session[:user].id %>" />
+	<p>
+		<b><%= link_to @bargain.product1.name, @bargain.product1 %></b>
+		<%= f.number_field :product1quantity, :size => 3, :maxlength => 3, :disabled => true %>&nbsp;gegen&nbsp;
+		<%= f.number_field :product2quantity, :size => 3, :maxlength => 3, :disabled => true %>
+		<b><%= link_to @bargain.product2.name, @bargain.product2 %></b>
+	</p>
+	<h2>Tausch dokumentieren!</h2>
+	<% if session[:user].id == @bargain.userId1 %>
+		<p>
+			<%= f.label :youtube_url1, "Link zum Youtube-Video 1" %><br />
+			<%= f.text_field :youtube_url1, :size => 80 %>
+		</p>
+		<p>
+			<%= f.label :youtube_url3, "Link zum Youtube-Video 2" %><br />
+			<%= f.text_field :youtube_url3, :size => 80 %>
+		</p>
+	<% else %>
+		<p>
+		<%= f.label :youtube_url2, "Link zum Youtube-Video 1" %><br />
+		<%= f.text_field :youtube_url2, :size => 80 %>
+		</p>
+		<p>
+		<%= f.label :youtube_url4, "Link zum Youtube-Video 2" %><br />
+		<%= f.text_field :youtube_url4, :size => 80 %>
+		</p>
+	<% end %>
+	<%
+		if (session[:user].id == @bargain.userId1)
+			i = 1
+			start = 1
+		else
+			i = 5
+			start = 5
+		end
+		while i < start + 5  do
+			if @bargain.send("photo#{i}").present?
+				photo = @bargain.send("photo#{i}")
+	%>
+				<p>
+					<%= f.label "photo" + i.to_s, "Foto" %><br />
+					<%= link_to image_tag(photo.url(:thumb)), photo.url(:original) %>
+					<input name="bargain[delete_photo<%= i %>]" type="hidden" value="0" /><input id="user_gotSample" name="bargain[delete_photo<%= i %>]" type="checkbox" value="1" /> löschen
+				</p>
+			<% else %>
+				<p>
+					<%= f.label "photo" + i.to_s, "Foto" %><br />
+					<%= f.file_field "photo" + i.to_s %>
+				</p>
+	 <%
+			end
+			i +=1
+		end
+	%>
+	<p><%= submit_tag "Tausch dokumentieren", :name => "save" %></p>
+<% end %>
+
+<% if (session[:user].id == @bargain.userId1) %>
+	<p>Dieser Tausch ist schon abgeschlossen. Du kannst ihn nicht mehr löschen.</p>
+<% end %>

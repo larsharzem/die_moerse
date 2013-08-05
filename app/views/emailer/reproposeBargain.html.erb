@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+	<style type="text/css">
+	body {
+		font-family: monospace;
+		font-weight: bold;
+		font-size: 13px;
+		color: #333333;
+		line-height: 18px;
+	}
+
+	a {
+	  color: #000;
+	  &:visited {
+		color: #666; }
+	  &:hover {
+		color: #333333 } }
+	</style>
+  </head>
+  <body>
+    <h2><%= @sendingUser.name %> möchte mit Ihnen handeln!</h2>
+	<p>Sehr geehrte(r) <%= @receivingUser.name %>,</p>
+	<p><a href="http://emw.fh-potsdam.de/moerse/users/<%= @sendingUser.id %>"><%= @sendingUser.name %></a> (<a href="mailto:<%= @sendingUser.email %>"><%= @sendingUser.email %></a>) hat einen Ihnen einen Gegenvorschlag für folgenden Tausch unterbreitet:</p>
+	<p>
+		Sein Produkt "<%= @sendingUserProduct.name %>"
+	</p>
+	<p>gegen</p>
+	<p>
+		Ihr Produkt "<%= @receivingUserProduct.name %>"
+	</p>
+	<p>Unter <a href="http://www.moerse.tk">moerse.tk</a> können Sie den vorgeschlagenen Tausch akzeptieren, ablehnen oder ein Gegenangebot unterbreiten.</p>
+	<p>Herzlichst<br/>
+	Ihre moerse</p>
+  </body>
+</html>

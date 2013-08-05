@@ -1,0 +1,21 @@
+<h1>Alle Benutzer!</h1>
+
+<% @users.each do |user|
+	bargainsCount = Bargain.find(:all, :conditions => {:userId1 => user.id, :status => "1"}).count + Bargain.find(:all, :conditions => {:userId2 => user.id, :status => "1"}).count
+	productsCount = Product.find(:all, :conditions => ["userId = ? AND inactive!= ?", user.id, true]).count	
+  %>
+	  <div class="user-tile">
+		<div class="user-tile-bottom">
+		<% if user.photo.present? %>
+			<%= link_to image_tag(user.photo.url(:thumb)), user %>
+		<% else %>
+			<%= link_to image_tag("/images/dummy_user.jpg", {:height => 130}), user %>
+		<% end %><br />
+		<%= link_to user.name, user %><br />
+		<%= Product.find(:all, :conditions => ["userId = ? AND inactive!= ?", user.id, true]).count %> Produkt<%= productsCount != 1 ? "e" : "" %><br />
+		<%= bargainsCount %> Tausch<%= bargainsCount != 1 ? "e" : "" %>
+		</div>
+	  </div>
+<% end %>
+
+<p style="clear: both; margin-top: 5px"><a href="<%= url_for :action => :new, :controller => "users" %>">Registrieren</a></p>

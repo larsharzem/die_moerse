@@ -1,0 +1,89 @@
+﻿<div style="float: left; display: block; width: 300px">
+	<div style="height: 150px; position: relative">
+		<div style="; position: absolute; bottom: 0">
+			<% if @bargain.owningUser1.photo.present? %>
+				  <%= image_tag @bargain.owningUser1.photo.url(:thumb) %>
+			<% else %>
+				<%= image_tag "/images/dummy_user.jpg", {:height => 130} %>
+			<% end %>
+			<a href="<%= url_for :action => :show, :controller => :users, :id => @bargain.userId1 %>"><%= @bargain.owningUser1.name %></a>
+		</div>
+	</div>
+	<br/>
+
+	<div class="bargain-link">
+		<a href="<%= url_for :action => :show, :controller => :products, :id => @bargain.product1.id %>"><%= @bargain.product1quantity %>x
+			<span class="list-head"><%= @bargain.product1.name %></span><br/>
+			<%= @bargain.product1.description[0..170].strip + (@bargain.product1.description.length > 170 ? "... [mehr]" : "") %>
+		</a>
+	</div>
+</div>
+
+<div style="float: left; margin-top: 100px;">gegen</div>
+
+<div style="float: right; display: block; width: 300px">
+	<div style="height: 150px; position: relative">
+		<div style="; position: absolute; bottom: 0">
+			<a href="<%= url_for :action => :show, :controller => :users, :id => @bargain.userId2 %>"><%= @bargain.owningUser2.name %></a>
+			<% if @bargain.owningUser2.photo.present? %>
+				  <%= image_tag @bargain.owningUser2.photo.url(:thumb) %>
+			<% else %>
+				<%= image_tag "/images/dummy_user.jpg", {:height => 130} %>
+			<% end %>
+		</div>
+	</div>
+	<br/>
+	
+	<div class="bargain-link">
+		<a href="<%= url_for :action => :show, :controller => :products, :id => @bargain.product2.id %>"><%= @bargain.product2quantity %>x
+			<span class="list-head"><%= @bargain.product2.name %></span><br />
+			<%= @bargain.product2.description[0..170].strip + (@bargain.product2.description.length > 170 ? "... [mehr]" : "") %>
+		</a>
+	</div>
+</div>
+
+<div style="clear:both; padding-top: 15px;">
+	<h2>Videos des Tausches!</h2>
+	<% unless @bargain.youtube_url1.nil? || @bargain.youtube_url1 == "" %>
+		<p><iframe title='YouTube video player' width='640' height='390' src='http://www.youtube.com/embed/<%= @bargain.youtube_embed(@bargain.youtube_url1) %>' frameborder='0' allowfullscreen></iframe></p>
+	<% end %>
+	<% unless @bargain.youtube_url3.nil? || @bargain.youtube_url3 == "" %>
+		<p><iframe title='YouTube video player' width='640' height='390' src='http://www.youtube.com/embed/<%= @bargain.youtube_embed(@bargain.youtube_url3) %>' frameborder='0' allowfullscreen></iframe></p>
+	<% end %>
+	<% unless @bargain.youtube_url2.nil? || @bargain.youtube_url2 == "" %>
+		<p><iframe title='YouTube video player' width='640' height='390' src='http://www.youtube.com/embed/<%= @bargain.youtube_embed(@bargain.youtube_url2) %>' frameborder='0' allowfullscreen></iframe></p>
+	<% end %>
+	<% unless @bargain.youtube_url4.nil? || @bargain.youtube_url4 == "" %>
+		<p><iframe title='YouTube video player' width='640' height='390' src='http://www.youtube.com/embed/<%= @bargain.youtube_embed(@bargain.youtube_url4) %>' frameborder='0' allowfullscreen></iframe></p>
+	<% end %>
+	<% if (@bargain.youtube_url1.nil? || @bargain.youtube_url1 == "") && (@bargain.youtube_url2.nil? || @bargain.youtube_url2 == "") && (@bargain.youtube_url3.nil? || @bargain.youtube_url3 == "") && (@bargain.youtube_url4.nil? || @bargain.youtube_url4 == "")  %>
+		<p>Es gibt leider noch keine Videos für diesen Tausch.</p>
+	<% end %>
+	
+	<h2>Bilder des Tausches!</h2>
+	<%
+		counter = 0
+		(1..10).each do |i|
+			if @bargain.send("photo#{i}").present?
+				photo = @bargain.send("photo#{i}")
+	%>
+				<p>
+					<%= link_to image_tag(photo.url(:medium)), photo.url(:original) %>
+				</p>
+	<%
+				counter += 1
+			end
+		end
+		if counter == 0
+	%>
+		<p>Es gibt leider noch keine Bilder für diesen Tausch.</p>
+	<% end %>
+</div>
+
+<% if session[:user] && (@bargain.userId1 == session[:user].id || @bargain.userId2 == session[:user].id) %>
+	<p><%= link_to "Eigenen Tausch bearbeiten", edit_bargain_path(@bargain) %></p>
+<% end %>
+
+<% if session[:user] && session[:user].id == 1 %>
+	<p><a href="<%= url_for bargain_destroy_path(:id => @bargain.id) %>">ALS ADMINISTRATOR LÖSCHEN (vorsicht!)</a></p>
+<% end %>

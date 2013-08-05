@@ -1,0 +1,31 @@
+﻿<%= form_for(@bargain) do |f| %>
+	<% if @bargain.errors.any? %>
+		<div id="error_explanation">
+		  <h2><%= pluralize(@bargain.errors.count, "error") %> prohibited this bargain from being saved:</h2>
+
+		  <ul>
+		  <% @bargain.errors.full_messages.each do |msg| %>
+			<li><%= msg %></li>
+		  <% end %>
+		  </ul>
+		</div>
+	<% end %>
+  <input id="bargain[proposingUser]" name="bargain[proposingUser]" type="hidden" value="<%= session[:user].id %>" />
+  <p>
+	<b><%= link_to @bargain.product1.name, @bargain.product1 %></b>
+	<%= f.number_field :product1quantity, :size => 3, :maxlength => 3 %>&nbsp;gegen&nbsp;
+	<%= f.number_field :product2quantity, :size => 3, :maxlength => 3 %>
+	<b><%= link_to @bargain.product2.name, @bargain.product2 %></b>
+  </p>
+  
+  <p>
+	<%= submit_tag "Tausch modifizieren", :name => "repropose" %>
+	<% if (@bargain.proposingUser != session[:user].id) %>
+		<%= submit_tag "Tausch akzeptieren", :name => "accept" %> <%= submit_tag "Tausch ablehnen", :name => "deny" %>
+	<% end %>
+  </p>
+<% end %>
+
+<% if (session[:user].id == @bargain.userId1) %>
+	<p><a href="<%= url_for bargain_destroy_path(:id => @bargain.id) %>">Tausch löschen</a></p>
+<% end %>

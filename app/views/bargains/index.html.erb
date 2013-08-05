@@ -1,0 +1,36 @@
+﻿<h1>Alle Tausche!</h1>
+<% if session[:user] %>
+	<p><%= link_to 'Tausch vorschlagen', new_bargain_path %></p>
+<% end %>
+<table>
+  <tr>
+    <th>Produkt 1</th>
+    <th>x</th>
+    <td>gegen</td>
+    <th>x</th>
+    <th>Produkt 2</th>
+  </tr>
+
+<% @bargains.each do |bargain| %>
+  <tr>
+    <td><%= (Product.find_by_id(bargain.product1id)).name %></td>
+    <td><%= bargain.product1quantity %></td>
+	
+    <td>&nbsp;</td>
+	
+    <td><%= bargain.product2quantity %></td>
+    <td><%= (Product.find_by_id(bargain.product2id)).name %></td>
+    <td><%= link_to 'zeigen', bargain %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<% if session[:user] %>
+	<p><%= link_to 'Tausch vorschlagen', new_bargain_path %></p>
+<% else %>
+	<p>Bitte logge dich ein um Produkte tauschen zu können!</p>
+<% end %>
+
+<br />
